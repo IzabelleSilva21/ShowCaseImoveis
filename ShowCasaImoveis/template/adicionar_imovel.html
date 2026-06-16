@@ -1,0 +1,107 @@
+{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{% load static%}
+
+{% block titulo %} Cadastrar Imóvel {% endblock %}
+
+{%block content%}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0"><i class="bi bi-house-add-fill me-2"></i>Cadastrar Novo Imóvel</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <form action="{% url 'adicionar_imovel' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <h5 class="text-secondary border-bottom pb-2 mb-3">Informações Básicas</h5>
+
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Título do Anúncio</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ex: Casa Duplex Moderna com Piscina" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição Detalhada</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="4" placeholder="Fale sobre os cômodos, acabamentos, diferenciais..." required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="tipo_Imovel" class="form-label">Tipo do Imóvel</label>
+                                <select class="form-select" id="tipo_Imovel" name="tipo_Imovel" required>
+                                    <option value="" disabled selected>Escolha...</option>
+                                    <option value="Casa">Casa</option>
+                                    <option value="Apartamento">Apartamento</option>
+                                    <option value="Terreno">Terreno</option>
+                                    <option value="Comercial">Ponto Comercial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="ano_construcao" class="form-label">Ano de Construção</label>
+                                <input type="number" class="form-control" id="ano_construcao" name="ano_construcao" placeholder="Ex: 2024" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="preco" class="form-label">Preço (R$)</label>
+                                <input type="number" step="0.01" class="form-control" id="preco" name="preco" placeholder="Ex: 450000.00" required>
+                            </div>
+                        </div>
+
+                        <h5 class="text-secondary border-bottom pb-2 min-3 mt-4">Localização</h5>
+
+                        <div class="row">
+                            <div class="col-md-9 mb-3">
+                                <label for="logradouro" class="form-label">Rua / Avenida</label>
+                                <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Ex: Av. Paulista" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="numero" class="form-label">Número</label>
+                                <input type="text" class="form-control" id="numero" name="numero" placeholder="Ex: 123" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="bairro" class="form-label">Bairro</label>
+                                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Ex: Centro" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
+                            </div>
+                        </div>
+
+                        <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Galeria de Fotos</h5>
+
+                        <div class="mb-3">
+                            <label for="imagem_principal" class="form-label fw-bold">Imagem Principal (Capa do Anúncio)</label>
+                            <input class="form-control" type="file" id="imagem_principal" name="imagem_principal" accept="image/*" required>
+                            <div class="form-text">Esta imagem aparecerá na vitrine principal do site.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="imagens_adicionais" class="form-label">Imagens Adicionais (Opcional)</label>
+                            <input class="form-control" type="file" id="imagens_adicionais" name="imagens_adicionais" accept="image/*" multiple>
+                            <div class="form-text">Você pode selecionar várias imagens segurando a tecla <b>Ctrl</b> ou arrastando o mouse.</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top pt-3 mt-4">
+                            <a href="{% url 'pagina_inicial' %}" class="btn btn-outline-danger px-4 py-2">
+                                <i class="bi bi-x-circle me-2"></i>Cancelar Operação
+                            </a>
+                            <button type="submit" class="btn btn-success px-5 py-2">
+                                <i class="bi bi-check-circle me-2"></i>Salvar Imóvel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

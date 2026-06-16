@@ -1,0 +1,44 @@
+{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+
+{% block titulo %} Login | ShowCase Imóveis{% endblock %}
+
+{%block content%}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">      <!--vai ocupar 4 das 12 colunas -->
+        <div class="card shadow">     <!-- Cartão - Como se fosse uma caixinha -->
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"> Login </h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="POST">
+                    <!-- Segurança para pessoas mal intensionadas não falsificarem o envio do seu formulário de outro site-->
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label"> Usuário </label>
+                        <input type="text" name="username" class="form-control" id="username"
+                               placeholder="Digite seu usuário">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="senha" class="form-label"> Senha </label>
+                        <div class="input-group">
+                            <input type="password" name="password" class="form-control" id="senha"
+                               placeholder="Digite sua senha" required>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary"> Entrar </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer text-center bg-transparent border-top-0 pb-3">
+                <small class="text-muted"> Ainda não possui conta? <a href="{% url 'cadastro' %}" class="text-primary fw-bold">Cadastre-se</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

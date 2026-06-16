@@ -1,0 +1,22 @@
+/* Efeito de zoom suave ao passar o mouse nos cards de imóveis */
+/*Quando o card está parado*/
+.card-imovel {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/*Quando passa o mouse por cima*/
+.card-imovel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* NOVA CLASSE: Para controlar o tamanho e comportamento da foto do imóvel */
+.foto-vitrine-imovel {
+    height: 250px;
+    object-fit: cover;
+}
+
+/* NOVA CLASSE: Para controlar o tamanho da caixinha cinza quando não tem foto */
+.sem-foto-vitrine {
+    height: 250px;
+}

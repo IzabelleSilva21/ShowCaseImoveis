@@ -1,0 +1,125 @@
+{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{% load static %}
+
+{% block titulo %}Detalhes do Imóvel - {{ imovel.titulo }} {% endblock %}
+
+{%block content%}
+
+<div class="container my-5">
+    <div class="row g-4">
+
+        <div class="col-md-7">
+            <div id="carrosselImovel" class="carousel slide shadow rounded overflow-hidden" data-bs-ride="carousel">
+
+                {% if fotos %}
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carrosselImovel" data-bs-slide-to="0" class="active"
+                            aria-current="true" aria-label="Slide 1"></button>
+                    {% for foto in fotos %}
+                    <button type="button" data-bs-target="#carrosselImovel" data-bs-slide-to="{{ forloop.counter }}"
+                            aria-label="Slide {{ forloop.counter|add:1 }}"></button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ imovel.imagem_principal.url }}" class="d-block w-100"
+                             style="height: 450px; object-fit: cover;" alt="Imagem Principal">
+                    </div>
+
+                    {% for foto in fotos %}
+                    <div class="carousel-item">
+                        <img src="{{ foto.imagem.url }}" class="d-block w-100" style="height: 450px; object-fit: cover;"
+                             alt="Foto Adicional">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% if fotos %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#carrosselImovel"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carrosselImovel"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card h-100 shadow border-0 p-4">
+                <span class="badge bg-success mb-2 align-self-start">{{ imovel.tipo_Imovel }}</span>
+                <h1 class="h3 fw-bold text-dark">{{ imovel.titulo }}</h1>
+
+                <p class="text-muted small mb-1">
+                    <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+                    {{ imovel.logradouro }}, Nº {{ imovel.numero }}
+                </p>
+                <p class="text-muted small mb-3 ps-3">
+                    {{ imovel.bairro }} - {{ imovel.cidade }}
+                </p>
+
+                <h2 class="text-primary fw-bold mb-4">R$ {{ imovel.preco }}</h2>
+
+                <h5 class="fw-bold mb-3">Características:</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-12">
+                        <div class="p-2 border rounded bg-light">
+                            <i class="bi bi-calendar-check me-2 text-primary"></i>Ano de Construção: <strong>{{ imovel.ano_construcao }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-2">Descrição:</h5>
+                <p class="text-secondary flex-grow-1">{{ imovel.descricao }}</p>
+
+                <hr>
+
+                <div class="mt-auto">
+
+                    {% if user == imovel.corretor %}
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'editar_imovel' imovel.id %}" class="btn btn-warning fw-bold text-white mb-1">
+                            <i class="bi bi-pencil-square me-2"></i>Editar Imóvel
+                        </a>
+
+                        <form action="{% url 'excluir_imovel' imovel.id %}" method="POST"
+                              onsubmit="return confirm('Tem certeza absoluta que deseja excluir este imóvel definitivamente?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger fw-bold w-100">
+                                <i class="bi bi-trash3-fill me-2"></i>Excluir Imóvel
+                            </button>
+                        </form>
+                    </div>
+
+                    {% else %}
+                    <div class="mt-4">
+                        <h5>Gostou deste imóvel? Entre em contato:</h5>
+
+                        <a href="https://api.whatsapp.com/send?phone=55{{ imovel.corretor.perfil_corretor.telefone }}&text=Olá! Gostaria de saber mais informações sobre o imóvel: {{ imovel.titulo }} (Código: {{ imovel.id }})."
+                           target="_blank"
+                           class="btn btn-success btn-lg w-100 mb-2 shadow-sm">
+                            <i class="bi bi-whatsapp me-2"></i> Conversar pelo WhatsApp
+                        </a>
+
+                        <a href="mailto:{{ imovel.corretor.email }}?subject=Interesse no Imóvel: {{ imovel.titulo }}"
+                           class="btn btn-outline-primary btn-lg w-100 shadow-sm">
+                            <i class="bi bi-envelope me-2"></i> Enviar E-mail
+                        </a>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %} Página Inicial | ShowCase Imóveis{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+
+    <div class="position-relative d-flex align-items-center justify-content-center py-4">
+
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-primary">ShowCase Imóveis</h1>
+            <h4 class="display-8 fw-bold text-dark">Vitrine de Imóveis</h4>
+            <p class="text-muted mb-0">Encontre o imóvel dos seus sonhos com total transparência</p>
+        </div>
+
+        {% if user.is_authenticated and user.perfil_corretor %}
+        <div class="position-absolute end-0">
+            <a href="{% url 'adicionar_imovel' %}" class="btn btn-success rounded-pill shadow-sm">
+                <i class="bi bi-plus-circle-fill me-2"></i>Cadastrar Imóvel
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="row g-4">
+        {% for imovel in imoveis %}
+        <div class="col-12 col-md-6">
+
+            <div class="card h-100 shadow-sm border-0 bg-light card-imovel">
+
+                {% if imovel.imagem_principal %}
+                <img src="{{ imovel.imagem_principal.url }}" class="card-img-top foto-vitrine-imovel" alt="{{ imovel.titulo }}">
+
+                {% else %}
+                <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center sem-foto-vitrine">
+                    <span>Sem imagem disponível</span>
+                </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-primary text-uppercase">{{ imovel.tipo_Imovel }}</span>
+                        <small class="text-muted">Ano de construção: {{ imovel.ano_construcao }}</small>
+                    </div>
+
+                    <h5 class="card-title fw-bold text-dark mb-2">{{ imovel.titulo }}</h5>
+
+                    <p class="card-text text-muted flex-grow-1">
+                        {{ imovel.descricao|truncatechars:120 }}
+                    </p>
+
+                    <p class="card-text mb-1">
+                        <i class="bi bi-geo-alt-fill text-danger"></i>
+                        <small class="text-secondary">{{ imovel.bairro }}, {{ imovel.cidade }}</small>
+                    </p>
+
+                    <hr class="text-muted my-3">
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <h4 class="text-success fw-bold m-0">R$ {{ imovel.preco }}</h4>
+
+                        <a href="{% url 'detalhes_imovel' imovel.id %}"
+                           class="btn btn-outline-primary btn-sm px-3 rounded-pill">Ver Detalhes</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="col-12 text-center my-5">
+            <p class="fs-4 text-muted">Nenhum imóvel disponível na vitrine no momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
