@@ -36,6 +36,7 @@
                     {% endfor %}
                 </div>
 
+<!--                Condicional para verificar se deve exibir as setas de navegação-->
                 {% if fotos %}
                 <button class="carousel-control-prev" type="button" data-bs-target="#carrosselImovel"
                         data-bs-slide="prev">
@@ -51,6 +52,7 @@
             </div>
         </div>
 
+<!--        Divisão com os detalhes do imóvel-->
         <div class="col-md-5">
             <div class="card h-100 shadow border-0 p-4">
                 <span class="badge bg-success mb-2 align-self-start">{{ imovel.tipo_Imovel }}</span>

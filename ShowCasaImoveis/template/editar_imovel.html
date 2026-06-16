@@ -1,4 +1,5 @@
-{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->
+{% load static %}
 
 {% block titulo %} Editar Imóvel - {{ imovel.titulo }} {% endblock %}
 
@@ -46,6 +47,7 @@
                                 <label for="preco" class="form-label">Preço (R$)</label>
                                 <input type="number" step="0.01" class="form-control" id="preco" name="preco" value="{{ imovel.preco|stringformat:'.2f' }}" required>
                             </div>
+
                         </div>
 
                         <h5 class="text-secondary border-bottom pb-2 mb-3 mt-4">Localização</h5>

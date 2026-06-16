@@ -18,7 +18,7 @@
         {% if user.is_authenticated and user.perfil_corretor %}
         <div class="position-absolute end-0">
             <a href="{% url 'adicionar_imovel' %}" class="btn btn-success rounded-pill shadow-sm">
-                <i class="bi bi-plus-circle-fill me-2"></i>Cadastrar Imóvel
+                <i class="bi bi-plus-circle-fill me-2"></i> Cadastrar Imóvel
             </a>
         </div>
         {% endif %}
@@ -34,6 +34,7 @@
                 {% if imovel.imagem_principal %}
                 <img src="{{ imovel.imagem_principal.url }}" class="card-img-top foto-vitrine-imovel" alt="{{ imovel.titulo }}">
 
+<!--                É possivel que esse else nunca seja executado-->
                 {% else %}
                 <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center sem-foto-vitrine">
                     <span>Sem imagem disponível</span>
