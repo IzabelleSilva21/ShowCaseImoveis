@@ -6,20 +6,20 @@ Para rodar o projeto corretamente em sua máquina, siga o passo a passo a seguir
 
 Abra o terminal e digite:
 
-#Para criar o ambiente virtual
+#Para criar o ambiente virtual: 
 python -m venv .venv
 
-#Para ativar o ambiente virtual
+#Para ativar o ambiente virtual: 
 venv\Scripts\activate
 
-#Para instalar as configurações utilizadas no projeto
+#Para instalar as configurações utilizadas no projeto: 
 pip install -r requirements.txt
 
-#Entrando no diretório certo
+#Entrando no diretório certo: 
 caso esteja na pasta raiz (ShowCaseImoveis), vá para a pasta "ShowCasaImoveis" (utilizando o comando: cd .\ShowcasaImoveis\) 
 
-#Fazendo a migração do modelo para o banco de dados
+#Fazendo a migração do modelo para o banco de dados: 
 manage.py migrate
 
-#Rodar o servidor
+#Rodar o servidor: 
 python manage.py runserver
