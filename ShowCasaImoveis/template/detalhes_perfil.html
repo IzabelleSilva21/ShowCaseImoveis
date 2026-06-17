@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Meu Perfil - ShowCase Imóveis {% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+
+        <h1 class="mb-4 text-center text-primary fw-bold">Meu Perfil</h1>
+
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title m-0 text-muted">Informações Pessoais</h5>
+
+                    {% if tipo_perfil == 'cliente' %}
+                    <span class="badge bg-info text-dark px-3 py-2 fs-6 rounded-pill text-uppercase">
+                            <i class="bi bi-person-fill"></i> Cliente
+                        </span>
+                    {% elif tipo_perfil == 'corretor' %}
+                    <span class="badge bg-success px-3 py-2 fs-6 rounded-pill text-uppercase">
+                            <i class="bi bi-briefcase-fill"></i> Corretor
+                        </span>
+                    {% else %}
+                    <span class="badge bg-secondary px-3 py-2 fs-6 rounded-pill text-uppercase">
+                            Admin
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3 border-bottom pb-2">
+                    <label class="form-label text-muted small text-uppercase fw-bold">Nome de Usuário</label>
+                    <p class="fs-5 mb-0 text-dark">{{ usuario.username }}</p>
+                </div>
+
+                <div class="mb-3 border-bottom pb-2">
+                    <label class="form-label text-muted small text-uppercase fw-bold">E-mail</label>
+                    <p class="fs-5 mb-0 text-dark">{{ usuario.email }}</p>
+                </div>
+
+                <div class="mb-4 pb-2">
+                    <label class="form-label text-muted small text-uppercase fw-bold">Telefone / WhatsApp</label>
+                    <p class="fs-5 mb-0 text-dark">
+                        {% if perfil.telefone %}
+                        {{ perfil.telefone }}
+                        {% else %}
+                        <span class="text-muted text-opacity-50">Não informado</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="d-flex justify-content-between gap-2 mt-4">
+                    <a href="{% url 'pagina_inicial' %}" class="btn btn-outline-secondary px-4 py-2">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </a>
+
+                    <a href="{% url 'editar_perfil' %}" class="btn btn-primary px-4 py-2">
+                        <i class="bi bi-pencil-square me-2"></i> Editar Perfil
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
