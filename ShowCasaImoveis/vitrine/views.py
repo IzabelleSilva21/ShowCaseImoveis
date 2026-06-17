@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
@@ -143,6 +143,28 @@ def detalhes_imovel(request, id):
 
     return render(request, 'detalhes_imovel.html', dados_para_a_tela)
 
+@login_required
+def detalhes_perfil(request):
+    usuario = request.user
+    perfil = None
+    tipo_perfil = None
+
+    if hasattr(usuario, 'perfil_cliente'):
+        perfil = usuario.perfil_cliente
+        tipo_perfil = 'cliente'
+
+    elif hasattr(usuario, 'perfil_corretor'):
+        perfil = usuario.perfil_corretor
+        tipo_perfil = 'corretor'
+
+    dados_para_tela = {
+        'usuario': usuario,
+        'perfil': perfil,
+        'tipo_perfil': tipo_perfil,
+    }
+
+    return render(request, 'detalhes_perfil.html', dados_para_tela)
+
 
 @login_required     #Só quem tá logado pode acessar essa função
 def editar_perfil(request):
@@ -158,7 +180,7 @@ def editar_perfil(request):
         tipo_perfil = 'corretor'
 
     if request.method == "POST":
-        usuario.first_name = request.POST.get('name')
+        usuario.username = request.POST.get('username')
         usuario.email = request.POST.get('email')
         usuario.save()
 
@@ -175,7 +197,7 @@ def editar_perfil(request):
     return render(request, 'editar_perfil.html', dados_para_a_tela)
 
 
-#Lógica do cadastro corrigida
+#Lógica do cadastro
 def cadastrar_usuario(request):
     if request.method == "POST":
         # Capturando os dados que vieram do formulário limpo do HTML
@@ -186,12 +208,12 @@ def cadastrar_usuario(request):
         senha_input = request.POST.get('password')
         confirmacao_senha = request.POST.get('password_confirm')
 
-        # Validação simples: verificar se as senhas coincidem
+        # Validação simples: verifica se as senhas são iguais
         if senha_input != confirmacao_senha:
             messages.error(request, 'A senha e a confirmação devem ser iguais!')
             return render(request, 'cadastro.html')
 
-        # Validação simples: verificar se o usuário já existe
+        # Validação simples: verifica se o usuário já existe
         if User.objects.filter(username=usuario_input).exists():
             messages.error(request, 'Este nome de usuário já está em uso.')
             return render(request, 'cadastro.html')
@@ -231,6 +253,9 @@ def login_usuario(request):
         else:
             messages.error(request, 'Não foi possivel realizar o login!\nUsuário e/ou senha inválidos!')
     else:
+        if request.user.is_authenticated:
+            logout(request)
+
         form = AuthenticationForm()
 
     return  render(request, 'login.html', {'form': form})

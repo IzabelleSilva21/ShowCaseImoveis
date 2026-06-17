@@ -30,7 +30,7 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield; /* Para o Firefox */
-    appearance: none;           /* Padrão moderno */
+    appearance: none; /* Padrão moderno */
 }
 
 /* Estilização das imagens no carrossel da página de detalhes */
@@ -43,4 +43,28 @@ input[type=number] {
 .img-miniatura-edicao {
     height: 100px;
     object-fit: cover;
+}
+
+
+/* Customizações da Navbar - ShowCase Imóveis */
+
+/* Define o tamanho mínimo do menu flutuante do perfil */
+.dropdown-menu-perfil {
+    min-width: 200px;
+}
+
+/* Formatação sutil para as etiquetas de Corretor/Cliente */
+.navbar-badge-perfil {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+}
+
+/* Efeito visual suave ao passar o mouse ou focar no botão do perfil */
+.navbar .hover-bg {
+    transition: background-color 0.2s ease;
+}
+
+.navbar .hover-bg:hover,
+.navbar .hover-bg:focus {
+    background-color: rgba(0, 0, 0, 0.05) !important;
 }

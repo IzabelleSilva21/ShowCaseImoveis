@@ -28,48 +28,64 @@
     {% endfor %}
     {% endif %}
 
-    <!--       Barra de navegação - cabeçalho responsivo (só aparece se estiver logado) -->
+    <!-- Barra de navegação - cabeçalho responsivo (só aparece se estiver logado) -->
     {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{% url 'pagina_inicial' %}">
-                <i class="bi bi-building"></i> ShowCase Imóveis
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom py-3">
+        <div class="container-fluid">
+
+            <a class="navbar-brand fw-bold text-primary fs-4 d-flex align-items-center gap-2"
+               href="{% url 'pagina_inicial' %}">
+                <i class="bi bi-building text-success"></i>
+                <span>ShowCase Imóveis</span>
             </a>
 
-            <!-- Botão sanduíche para celular (os 3 riscos)-->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#conteudoNavbar"
+            <!--            Botão hamburguer (navbar-toggler)-->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#conteudoNavbar"
                     aria-controls="conteudoNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!--        O Bloco Retrátil (collapse e os links)-->
             <div class="collapse navbar-collapse" id="conteudoNavbar">
-                <!-- Links de Navegação -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'pagina_inicial' %}">Início</a>
-                    </li>
-                </ul>
+                <div class="navbar-nav ms-auto align-items-lg-center mt-2 mt-lg-0">
+                    <div class="dropdown">
 
-                <div class="d-flex align-items-center gap-3">
-                        <span class="text-light me-2">
-                            Olá, <strong class="text-white">{{ user.username }}</strong>! -
+                        <button class="d-flex align-items-center gap-2 border-0 bg-transparent text-decoration-none dropdown-toggle link-dark fw-medium py-1 px-2 rounded-3 hover-bg w-100 text-start"
+                                type="button" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
+
+                            <span class="d-none d-sm-inline">{{ user.username }}</span>
 
                             {% if user.perfil_corretor %}
-                                <span class="badge bg-success text-white ms-1 text-uppercase"
-                                      style="font-size: 0.75rem;">Corretor</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle text-uppercase px-2 py-1 ms-1 navbar-badge-perfil">Corretor</span>
                             {% else %}
-                                <span class="badge bg-info text-dark ms-1 text-uppercase"
-                                      style="font-size: 0.75rem;">Cliente</span>
+                            <span class="badge bg-info-subtle text-info border border-info-subtle text-uppercase px-2 py-1 ms-1 navbar-badge-perfil">Cliente</span>
                             {% endif %}
-                        </span>
-                    <!--                        Todo: Fazer essa parte aqui-->
-                    <!--                    <a href="#" class="text-white fs-4 me-2" title="Meu Perfil">-->
-                    <!--                        <i class="bi bi-person-circle-fill text-primary"></i>-->
-                    <!--                    </a>-->
+                        </button>
 
-                    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                        <i class="bi bi-box-arrow-right"></i> Sair
-                    </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 p-2 rounded-3 dropdown-menu-perfil" aria-labelledby="dropdownPerfil">
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 rounded-2"
+                                   href="{% url 'detalhes_perfil' %}">
+                                    <i class="bi bi-gear text-secondary"></i> Meus Dados
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider my-2">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 rounded-2 text-danger"
+                                   href="{% url 'logout' %}">
+                                    <i class="bi bi-box-arrow-right"></i> Sair da Conta
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>

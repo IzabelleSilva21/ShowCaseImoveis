@@ -1,7 +1,76 @@
-{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{% extends 'base.html' %}
 
-{% block titulo %} {% endblock %}
+{% block titulo %} Editar Perfil - ShowCase Imóveis {% endblock %}
 
-{%block content%}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
 
-{endblock}
+        <h1 class="mb-4 text-center text-primary fw-bold">Editar Meu Perfil</h1>
+
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-4">
+
+                <form method="POST" action="{% url 'editar_perfil' %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label text-muted small text-uppercase fw-bold">Nome de Usuário</label>
+                        <input type="text"
+                               class="form-control"
+                               id="id_username"
+                               name="username"
+                               value="{{ usuario.username }}"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label text-muted small text-uppercase fw-bold">E-mail</label>
+                        <input type="email"
+                               class="form-control"
+                               id="id_email"
+                               name="email"
+                               value="{{ usuario.email }}"
+                               required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_telefone" class="form-label text-muted small text-uppercase fw-bold">Telefone / WhatsApp</label>
+                        <input type="text"
+                               class="form-control"
+                               id="id_telefone"
+                               name="telefone"
+                               value="{% if perfil.telefone %}{{ perfil.telefone }}{% endif %}"
+                               placeholder="(00) 00000-0000"
+                               required>
+                    </div>
+
+                    <div class="mb-4 text-end">
+                        <small class="text-muted">Tipo de Conta: </small>
+                        {% if tipo_perfil == 'cliente' %}
+                            <span class="badge bg-info text-dark text-uppercase">Cliente</span>
+                        {% elif tipo_perfil == 'corretor' %}
+                            <span class="badge bg-success text-uppercase">Corretor</span>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between gap-2 mt-3">
+                        <a href="{% url 'detalhes_perfil' %}" class="btn btn-outline-danger px-4 py-2">
+                            <i class="bi bi-x-circle me-2"></i>Cancelar
+                        </a>
+
+                        <button type="submit" class="btn btn-success px-4 py-2">
+                            <i class="bi bi-check-lg"></i> Salvar Alterações
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
