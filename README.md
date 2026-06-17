@@ -1,4 +1,4 @@
-Projeto: Show Case Imoveis
+Projeto: Show Case Imoveis.
 Projeto em python, utilizando Django, de uma vitrine de imóveis disponíveis para venda. 
 Feito com: python, django, bootstrap, HTML, CSS, JS, banco relacional estruturado e configuracoes basicas de seguranca.
 
