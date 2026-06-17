@@ -95,7 +95,7 @@
                                     {% for foto in imovel.imagens.all %}
                                         <div class="col-6 col-sm-4 col-md-3 text-center position-relative">
                                             <div class="card h-100 border shadow-sm">
-                                                <img src="{{ foto.imagem.url }}" class="card-img-top p-1" style="height: 100px; object-fit: cover;" alt="Foto adicional">
+                                                <img src="{{ foto.imagem.url }}" class="card-img-top p-1 img-miniatura-edicao" alt="Foto adicional">
                                                 <div class="card-body p-2 bg-white border-top">
                                                     <div class="form-check d-flex justify-content-center align-items-center m-0">
                                                         <input class="form-check-input me-2 border-danger" type="checkbox" name="excluir_fotos" value="{{ foto.id }}" id="foto_{{ foto.id }}">

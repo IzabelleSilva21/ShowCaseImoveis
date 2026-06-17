@@ -38,3 +38,9 @@ input[type=number] {
     height: 450px;
     object-fit: cover;
 }
+
+/* Miniaturas das fotos adicionais na tela de edição */
+.img-miniatura-edicao {
+    height: 100px;
+    object-fit: cover;
+}
