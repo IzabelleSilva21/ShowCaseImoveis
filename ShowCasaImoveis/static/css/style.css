@@ -20,3 +20,21 @@
 .sem-foto-vitrine {
     height: 250px;
 }
+
+/* Remove as setinhas de incremento/decremento dos campos numéricos */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Para o Firefox */
+    appearance: none;           /* Padrão moderno */
+}
+
+/* Estilização das imagens no carrossel da página de detalhes */
+.img-carrossel-detalhe {
+    height: 450px;
+    object-fit: cover;
+}

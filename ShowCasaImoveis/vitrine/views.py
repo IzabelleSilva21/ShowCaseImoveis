@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 
 from .models import *
 
+#Criar um metodo group para poder colocar a lógica de ser o tipo corretor e estar logado (utilizar no adicionar_imovel)
 
 def pagina_inicial(request):
     lista_imoveis = Imovel.objects.all()
@@ -115,6 +116,7 @@ def editar_imovel(request, id):
     # Passando o dicionário para a função render
     return render(request, 'editar_imovel.html', dados_para_tela)
 
+
 @login_required
 @require_POST
 def excluir_imovel(request, id):
@@ -130,7 +132,6 @@ def excluir_imovel(request, id):
     return redirect('pagina_inicial')
 
 
-#todo: Ver se essa "imagens não vai dar nenhum erro
 def detalhes_imovel(request, id):
     imovel = get_object_or_404(Imovel, id=id)
     fotos_adicionais = imovel.imagens.all()
@@ -235,7 +236,6 @@ def login_usuario(request):
     return  render(request, 'login.html', {'form': form})
 
 
-#todo: Verificar para onde vai realmente direcionar ao clicar no botão "sair"
 #Lógica do logout (sair)
 def logout_usuario(request):
     logout(request)

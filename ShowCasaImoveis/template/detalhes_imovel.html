@@ -1,4 +1,4 @@
-{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->
 {% load static %}
 
 {% block titulo %}Detalhes do Imóvel - {{ imovel.titulo }} {% endblock %}
@@ -24,14 +24,12 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ imovel.imagem_principal.url }}" class="d-block w-100"
-                             style="height: 450px; object-fit: cover;" alt="Imagem Principal">
+                        <img src="{{ imovel.imagem_principal.url }}" class="d-block w-100 img-carrossel-detalhe" alt="Imagem Principal">
                     </div>
 
                     {% for foto in fotos %}
                     <div class="carousel-item">
-                        <img src="{{ foto.imagem.url }}" class="d-block w-100" style="height: 450px; object-fit: cover;"
-                             alt="Foto Adicional">
+                        <img src="{{ foto.imagem.url }}" class="d-block w-100 img-carrossel-detalhe" alt="Foto Adicional">
                     </div>
                     {% endfor %}
                 </div>
