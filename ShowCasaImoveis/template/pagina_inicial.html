@@ -7,7 +7,11 @@
 
 <div class="container my-5">
 
-    <div class="position-relative d-flex align-items-center justify-content-center py-4">
+    <!-- Cabeçalho responsivo para evitar sobreposição em telas pequenas -->
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between position-relative py-4 gap-3">
+
+        <!-- Espaçador invisível na esquerda apenas para centralizar o título no desktop -->
+        <div class="d-none d-md-block header-spacer"></div>
 
         <div class="text-center">
             <h1 class="display-5 fw-bold text-primary">ShowCase Imóveis</h1>
@@ -16,11 +20,15 @@
         </div>
 
         {% if user.is_authenticated and user.perfil_corretor %}
-        <div class="position-absolute end-0">
+        <div class="header-spacer text-md-end text-center">
             <a href="{% url 'adicionar_imovel' %}" class="btn btn-success rounded-pill shadow-sm">
                 <i class="bi bi-plus-circle-fill me-2"></i> Cadastrar Imóvel
             </a>
         </div>
+        {% else %}
+        <!-- Espaçador invisível na direita apenas para equilibrar o desktop -->
+        <div class="d-none d-md-block header-spacer"></div>
+
         {% endif %}
 
     </div>
@@ -32,9 +40,8 @@
             <div class="card h-100 shadow-sm border-0 bg-light card-imovel">
 
                 {% if imovel.imagem_principal %}
-                <img src="{{ imovel.imagem_principal.url }}" class="card-img-top foto-vitrine-imovel" alt="{{ imovel.titulo }}">
-
-<!--                É possivel que esse else nunca seja executado-->
+                <img src="{{ imovel.imagem_principal.url }}" class="card-img-top foto-vitrine-imovel"
+                     alt="{{ imovel.titulo }}">
                 {% else %}
                 <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center sem-foto-vitrine">
                     <span>Sem imagem disponível</span>
@@ -62,7 +69,6 @@
 
                     <div class="d-flex justify-content-between align-items-center mt-auto">
                         <h4 class="text-success fw-bold m-0">R$ {{ imovel.preco }}</h4>
-
                         <a href="{% url 'detalhes_imovel' imovel.id %}"
                            class="btn btn-outline-primary btn-sm px-3 rounded-pill">Ver Detalhes</a>
                     </div>
@@ -77,5 +83,4 @@
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}

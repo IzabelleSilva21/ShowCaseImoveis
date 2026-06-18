@@ -1,4 +1,4 @@
-{% extends 'base.html' %}     <!-- Extendendo o esqueleto da página base.html-->
+{% extends 'base.html' %}
 {% load static %}
 
 {% block titulo %}Detalhes do Imóvel - {{ imovel.titulo }} {% endblock %}
@@ -8,6 +8,7 @@
 <div class="container my-5">
     <div class="row g-4">
 
+        <!-- Carrossel de Imagens -->
         <div class="col-md-7">
             <div id="carrosselImovel" class="carousel slide shadow rounded overflow-hidden" data-bs-ride="carousel">
 
@@ -24,17 +25,19 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ imovel.imagem_principal.url }}" class="d-block w-100 img-carrossel-detalhe" alt="Imagem Principal">
+                        <img src="{{ imovel.imagem_principal.url }}" class="d-block w-100 img-carrossel-detalhe"
+                             alt="Imagem Principal">
                     </div>
 
                     {% for foto in fotos %}
                     <div class="carousel-item">
-                        <img src="{{ foto.imagem.url }}" class="d-block w-100 img-carrossel-detalhe" alt="Foto Adicional">
+                        <img src="{{ foto.imagem.url }}" class="d-block w-100 img-carrossel-detalhe"
+                             alt="Foto Adicional">
                     </div>
                     {% endfor %}
                 </div>
 
-<!--                Condicional para verificar se deve exibir as setas de navegação-->
+                <!--                Condicional para verificar se deve exibir as setas de navegação-->
                 {% if fotos %}
                 <button class="carousel-control-prev" type="button" data-bs-target="#carrosselImovel"
                         data-bs-slide="prev">
@@ -50,7 +53,7 @@
             </div>
         </div>
 
-<!--        Divisão com os detalhes do imóvel-->
+        <!--        Divisão com os detalhes do imóvel-->
         <div class="col-md-5">
             <div class="card h-100 shadow border-0 p-4">
                 <span class="badge bg-success mb-2 align-self-start">{{ imovel.tipo_Imovel }}</span>
@@ -70,7 +73,8 @@
                 <div class="row g-3 mb-4">
                     <div class="col-12">
                         <div class="p-2 border rounded bg-light">
-                            <i class="bi bi-calendar-check me-2 text-primary"></i>Ano de Construção: <strong>{{ imovel.ano_construcao }}</strong>
+                            <i class="bi bi-calendar-check me-2 text-primary"></i>Ano de Construção: <strong>{{
+                            imovel.ano_construcao }}</strong>
                         </div>
                     </div>
                 </div>
@@ -82,6 +86,7 @@
 
                 <div class="mt-auto">
 
+                    <!-- Painel de Gerenciamento do Corretor Dono do Imóvel -->
                     {% if user == imovel.corretor %}
                     <div class="d-grid gap-2">
                         <a href="{% url 'editar_imovel' imovel.id %}" class="btn btn-warning fw-bold text-white mb-1">
@@ -89,7 +94,7 @@
                         </a>
 
                         <form action="{% url 'excluir_imovel' imovel.id %}" method="POST"
-                              onsubmit="return confirm('Tem certeza absoluta que deseja excluir este imóvel definitivamente?');">
+                              onsubmit="return confirm('Tem certeza que deseja excluir este imóvel definitivamente?');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger fw-bold w-100">
                                 <i class="bi bi-trash3-fill me-2"></i>Excluir Imóvel
@@ -97,11 +102,12 @@
                         </form>
                     </div>
 
+                    <!-- Botões de Contato para Clientes/Visitantes -->
                     {% else %}
                     <div class="mt-4">
                         <h5>Gostou deste imóvel? Entre em contato:</h5>
 
-                        <a href="https://api.whatsapp.com/send?phone=55{{ imovel.corretor.perfil_corretor.telefone }}&text=Olá! Gostaria de saber mais informações sobre o imóvel: {{ imovel.titulo }} (Código: {{ imovel.id }})."
+                        <a href="https://api.whatsapp.com/send?phone=55{{ imovel.corretor.perfil_corretor.telefone }}&text=Olá!%20Gostaria%20de%20saber%20mais%20informações%20sobre%20o%20imóvel%3A%20{{ imovel.titulo }}%20(Código%3A%20{{ imovel.id }})."
                            target="_blank"
                            class="btn btn-success btn-lg w-100 mb-2 shadow-sm">
                             <i class="bi bi-whatsapp me-2"></i> Conversar pelo WhatsApp
@@ -113,13 +119,9 @@
                         </a>
                     </div>
                     {% endif %}
-
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>
-
 {% endblock %}

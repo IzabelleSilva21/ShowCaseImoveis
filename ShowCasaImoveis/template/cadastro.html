@@ -1,5 +1,7 @@
-{%extends 'base.html'%}     <!-- Extendendo o esqueleto da página base.html-->>
+{%extends 'base.html'%}
 {% load static %}
+
+{% block titulo %} Cadastrar Usuário | ShowCase Imóveis {% endblock %}
 
 {%block content%}
 
@@ -7,7 +9,7 @@
     <div class="col-md-5">
         <div class="card shadow">
             <div class="card-header bg-primary text-white text-center">
-                <h4 class="mb-0"> Cadastro </h4>
+                <h4 class="mb-0"> Cadastrar Usuário </h4>
             </div>
             <div class="card-body p-4">
                 <form method="POST">
@@ -20,7 +22,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-control"> E-mail </label>
+                        <label for="email" class="form-label"> E-mail </label>
                         <input type="email" name="email" class="form-control" id="email"
                         placeholder="exemplo@gmail.com" required>
                     </div>

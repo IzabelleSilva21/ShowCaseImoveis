@@ -14,8 +14,10 @@
                 <form method="POST" action="{% url 'editar_perfil' %}">
                     {% csrf_token %}
 
+                    <!-- Campo: Usuário -->
                     <div class="mb-3">
-                        <label for="id_username" class="form-label text-muted small text-uppercase fw-bold">Nome de Usuário</label>
+                        <label for="id_username" class="form-label text-muted small text-uppercase fw-bold">Nome de
+                            Usuário</label>
                         <input type="text"
                                class="form-control"
                                id="id_username"
@@ -24,6 +26,7 @@
                                required>
                     </div>
 
+                    <!-- Campo: E-mail -->
                     <div class="mb-3">
                         <label for="id_email" class="form-label text-muted small text-uppercase fw-bold">E-mail</label>
                         <input type="email"
@@ -34,8 +37,10 @@
                                required>
                     </div>
 
+                    <!-- Campo: Telefone -->
                     <div class="mb-4">
-                        <label for="id_telefone" class="form-label text-muted small text-uppercase fw-bold">Telefone / WhatsApp</label>
+                        <label for="id_telefone" class="form-label text-muted small text-uppercase fw-bold">Telefone /
+                            WhatsApp</label>
                         <input type="text"
                                class="form-control"
                                id="id_telefone"
@@ -45,17 +50,19 @@
                                required>
                     </div>
 
+                    <!-- Tipo de Conta (informativo) -->
                     <div class="mb-4 text-end">
                         <small class="text-muted">Tipo de Conta: </small>
                         {% if tipo_perfil == 'cliente' %}
-                            <span class="badge bg-info text-dark text-uppercase">Cliente</span>
+                        <span class="badge bg-info text-dark text-uppercase">Cliente</span>
                         {% elif tipo_perfil == 'corretor' %}
-                            <span class="badge bg-success text-uppercase">Corretor</span>
+                        <span class="badge bg-success text-uppercase">Corretor</span>
                         {% endif %}
                     </div>
 
                     <hr>
 
+                    <!-- Botões de Ação -->
                     <div class="d-flex justify-content-between gap-2 mt-3">
                         <a href="{% url 'detalhes_perfil' %}" class="btn btn-outline-danger px-4 py-2">
                             <i class="bi bi-x-circle me-2"></i>Cancelar

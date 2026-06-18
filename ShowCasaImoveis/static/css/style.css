@@ -1,27 +1,9 @@
-/* Efeito de zoom suave ao passar o mouse nos cards de imóveis */
-/*Quando o card está parado*/
-.card-imovel {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
+/* ==========================================================================
+   CONFIGURAÇÕES GLOBAIS DO SISTEMA
+   ========================================================================== */
 
-/*Quando passa o mouse por cima*/
-.card-imovel:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* NOVA CLASSE: Para controlar o tamanho e comportamento da foto do imóvel */
-.foto-vitrine-imovel {
-    height: 250px;
-    object-fit: cover;
-}
-
-/* NOVA CLASSE: Para controlar o tamanho da caixinha cinza quando não tem foto */
-.sem-foto-vitrine {
-    height: 250px;
-}
-
-/* Remove as setinhas de incremento/decremento dos campos numéricos */
+/* Remove as setinhas de incremento/decremento dos campos numéricos (Input type="number")
+   Aplicado em: Cadastrar Imóvel e Editar Imóvel (Campos Ano e Preço) */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -29,42 +11,91 @@ input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
-    -moz-appearance: textfield; /* Para o Firefox */
-    appearance: none; /* Padrão moderno */
-}
-
-/* Estilização das imagens no carrossel da página de detalhes */
-.img-carrossel-detalhe {
-    height: 450px;
-    object-fit: cover;
-}
-
-/* Miniaturas das fotos adicionais na tela de edição */
-.img-miniatura-edicao {
-    height: 100px;
-    object-fit: cover;
+    -moz-appearance: textfield; /* Suporte para o navegador Firefox */
+    appearance: none;           /* Padrão moderno para navegadores atuais */
 }
 
 
-/* Customizações da Navbar - ShowCase Imóveis */
+/* ==========================================================================
+   NAVBAR (BASE DA APLICAÇÃO - base.html)
+   ========================================================================== */
 
-/* Define o tamanho mínimo do menu flutuante do perfil */
+/* Define a largura mínima para o menu dropdown flutuante do perfil do usuário */
 .dropdown-menu-perfil {
     min-width: 200px;
 }
 
-/* Formatação sutil para as etiquetas de Corretor/Cliente */
+/* Ajuste fino na tipografia das etiquetas (Badges) de Corretor/Cliente dentro do menu */
 .navbar-badge-perfil {
     font-size: 0.65rem;
     letter-spacing: 0.5px;
 }
 
-/* Efeito visual suave ao passar o mouse ou focar no botão do perfil */
+/* Transição suave de fundo para os elementos interativos da navbar */
 .navbar .hover-bg {
     transition: background-color 0.2s ease;
 }
 
+/* Efeito de destaque cinza sutil ao passar o mouse ou focar no botão do perfil */
 .navbar .hover-bg:hover,
 .navbar .hover-bg:focus {
     background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+
+/* ==========================================================================
+   VITRINE DE IMÓVEIS (PÁGINA INICIAL - index.html)
+   ========================================================================== */
+
+/* Define as dimensões invisíveis das laterais do topo para garantir que o
+   título do site fique perfeitamente centralizado em telas de Computador */
+.header-spacer {
+    width: 180px;
+}
+
+/* Configura a transição para criar um efeito visual dinâmico nos cards de imóveis */
+.card-imovel {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Efeito de levitação (subida leve de 5px) e sombra projetada ao passar o mouse no card */
+.card-imovel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Padroniza o tamanho das imagens na vitrine, evitando que fotos de tamanhos
+   diferentes quebrem o alinhamento dos cartões na grid */
+.foto-vitrine-imovel {
+    height: 250px;
+    object-fit: cover; /* Recorta e ajusta a imagem sem distorcê-la */
+}
+
+/* Mantém o bloco cinza de "Sem Imagem" com a mesma altura exata da foto padrão */
+.sem-foto-vitrine {
+    height: 250px;
+}
+
+
+/* ==========================================================================
+   PÁGINA DE DETALHES DO IMÓVEL (detalhes_imovel.html)
+   ========================================================================== */
+
+/* Controla a altura máxima do carrossel principal de fotos na tela de detalhes,
+   garantindo o preenchimento proporcional da imagem */
+.img-carrossel-detalhe {
+    height: 450px;
+    object-fit: cover;
+}
+
+
+/* ==========================================================================
+   PÁGINA DE EDIÇÃO DO IMÓVEL (editar_imovel.html)
+   ========================================================================== */
+
+/* Estiliza as miniaturas das fotos na galeria de exclusão, travando as caixas
+   em formato quadrado simétrico e organizado */
+.img-miniatura-edicao {
+    height: 100px;
+    object-fit: cover;
 }
