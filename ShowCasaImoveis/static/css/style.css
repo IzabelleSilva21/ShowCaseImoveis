@@ -94,7 +94,7 @@ input[type=number] {
    ========================================================================== */
 
 /* Estiliza as miniaturas das fotos na galeria de exclusão, travando as caixas
-   em formato quadrado simétrico e organizado */
+em formato quadrado simétrico e organizado */
 .img-miniatura-edicao {
     height: 100px;
     object-fit: cover;
