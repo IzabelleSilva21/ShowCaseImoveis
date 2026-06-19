@@ -26,5 +26,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             e.target.value = value;
         });
+
+        // 2. VALIDAÇÃO GLOBAL (Encontra o formulário "pai" do input)
+        const formularioPai = inputTelefone.closest("form");
+        if (formularioPai) {
+            formularioPai.addEventListener("submit", function (e) {
+                let numeroPuro = inputTelefone.value.replace(/\D/g, "");
+
+                if (numeroPuro.length < 11) {
+                    e.preventDefault(); // Impede o envio do formulário
+                    alert("Por favor, insira o número de telefone completo com DDD (11 dígitos).");
+                    inputTelefone.focus();
+                }
+            });
+        }
     }
 });
+
