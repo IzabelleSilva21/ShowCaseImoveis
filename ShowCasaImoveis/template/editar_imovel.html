@@ -34,14 +34,10 @@
                             <div class="col-md-4 mb-3">
                                 <label for="tipo_Imovel" class="form-label">Tipo do Imóvel</label>
                                 <select class="form-select" id="tipo_Imovel" name="tipo_Imovel" required>
-                                    <option value="Casa" {% if imovel.tipo_Imovel==
-                                    'Casa' %}selected{% endif %}>Casa</option>
-                                    <option value="Apartamento" {% if imovel.tipo_Imovel==
-                                    'Apartamento' %}selected{% endif %}>Apartamento</option>
-                                    <option value="Terreno" {% if imovel.tipo_Imovel==
-                                    'Terreno' %}selected{% endif %}>Terreno</option>
-                                    <option value="Comercial" {% if imovel.tipo_Imovel==
-                                    'Comercial' %}selected{% endif %}>Ponto Comercial</option>
+                                    <option value="Casa" {% if imovel.tipo_Imovel == 'Casa' %} selected {% endif %}>Casa</option>
+                                    <option value="Apartamento" {% if imovel.tipo_Imovel == 'Apartamento' %} selected {% endif %}>Apartamento</option>
+                                    <option value="Terreno" {% if imovel.tipo_Imovel == 'Terreno' %}selected{% endif %}>Terreno</option>
+                                    <option value="Comercial" {% if imovel.tipo_Imovel == 'Comercial' %}selected{% endif %}>Ponto Comercial</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
