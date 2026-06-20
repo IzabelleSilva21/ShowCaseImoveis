@@ -30,6 +30,17 @@
                 </div>
 
                 <div class="mb-3 border-bottom pb-2">
+                    <label class="form-label text-muted small text-uppercase fw-bold">Nome Completo</label>
+                    <p class="fs-5 mb-0 text-dark">
+                        {% if usuario.first_name %}
+                            {{ usuario.first_name }}
+                        {% else %}
+                            <span class="text-muted text-opacity-50">Não informado</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="mb-3 border-bottom pb-2">
                     <label class="form-label text-muted small text-uppercase fw-bold">Nome de Usuário</label>
                     <p class="fs-5 mb-0 text-dark">{{ usuario.username }}</p>
                 </div>

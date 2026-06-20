@@ -14,43 +14,59 @@
                 <form method="POST" action="{% url 'editar_perfil' %}">
                     {% csrf_token %}
 
-                    <!-- Campo: Usuário -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger p-2 small">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
                     <div class="mb-3">
-                        <label for="id_username" class="form-label text-muted small text-uppercase fw-bold">Nome de
-                            Usuário</label>
-                        <input type="text"
-                               class="form-control"
-                               id="id_username"
-                               name="username"
-                               value="{{ usuario.username }}"
-                               required>
+                        <label class="form-label text-muted small text-uppercase fw-bold d-block">
+                            <span class="d-block mb-1">Nome Completo</span>
+                            {{ form.first_name }}
+                        </label>
+                        {% if form.first_name.errors %}
+                            <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                        {% endif %}
                     </div>
 
-                    <!-- Campo: E-mail -->
                     <div class="mb-3">
-                        <label for="id_email" class="form-label text-muted small text-uppercase fw-bold">E-mail</label>
-                        <input type="email"
-                               class="form-control"
-                               id="id_email"
-                               name="email"
-                               value="{{ usuario.email }}"
-                               required>
+                        <label class="form-label text-muted small text-uppercase fw-bold d-block">
+                            <span class="d-block mb-1">Nome de Usuário</span>
+                            {{ form.username }}
+                        </label>
+                        {% if form.username.errors %}
+                            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                        {% endif %}
                     </div>
 
-                    <!-- Campo: Telefone -->
+                    <div class="mb-3">
+                        <label class="form-label text-muted small text-uppercase fw-bold d-block">
+                            <span class="d-block mb-1">E-mail</span>
+                            {{ form.email }}
+                        </label>
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+
                     <div class="mb-4">
-                        <label for="telefone" class="form-label text-muted small text-uppercase fw-bold">Telefone /
-                            WhatsApp</label>
-                        <input type="text"
-                               class="form-control"
-                               id="telefone"
-                               name="telefone"
-                               value="{% if perfil.telefone %}{{ perfil.telefone }}{% endif %}"
-                               placeholder="(00) 00000-0000"
-                               required>
+                        <label class="form-label text-muted small text-uppercase fw-bold d-block">
+                            <span class="d-block mb-1">Telefone / WhatsApp</span>
+                            <input type="text"
+                                   class="form-control"
+                                   id="telefone"
+                                   name="telefone"
+                                   value="{{ perfil_form.telefone.value|default_if_none:'' }}"
+                                   placeholder="(00) 00000-0000"
+                                   required>
+                        </label>
+                        {% if perfil_form.telefone.errors %}
+                            <div class="text-danger small mt-1">{{ perfil_form.telefone.errors }}</div>
+                        {% endif %}
                     </div>
 
-                    <!-- Tipo de Conta (informativo) -->
                     <div class="mb-4 text-end">
                         <small class="text-muted">Tipo de Conta: </small>
                         {% if tipo_perfil == 'cliente' %}
@@ -62,7 +78,6 @@
 
                     <hr>
 
-                    <!-- Botões de Ação -->
                     <div class="d-flex justify-content-between gap-2 mt-3">
                         <a href="{% url 'detalhes_perfil' %}" class="btn btn-outline-danger px-4 py-2">
                             <i class="bi bi-x-circle me-2"></i>Cancelar

@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 from .views import pagina_inicial, login_usuario, cadastrar_usuario, adicionar_imovel, detalhes_imovel, editar_imovel, \
     excluir_imovel, logout_usuario, detalhes_perfil, editar_perfil

@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
@@ -5,128 +7,94 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
-
+from .forms import ImovelForm, ClienteForm, CorretorForm, EditarUsuarioForm, CadastroUsuarioForm
 from .models import *
 
-#Criar um metodo group para poder colocar a lógica de ser o tipo corretor e estar logado (utilizar no adicionar_imovel)
+#decorador que verifica se o usuario está logado e se é um corretor
+def corretor_required(view_func):
+    @wraps(view_func)
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Você precisa estar logado para acessar esta página!')
+            return redirect('login')
+        if not hasattr(request.user, 'perfil_corretor'):
+            messages.error(request, 'Apenas usuários do tipo Corretor podem realizar essa ação!')
+            return redirect('pagina_inicial')
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
 
 def pagina_inicial(request):
     lista_imoveis = Imovel.objects.all()
     return render(request, 'pagina_inicial.html', {'imoveis': lista_imoveis})
 
 
-@login_required
+@corretor_required
 def adicionar_imovel(request):
 
-    #Aqui só usuários do tipo corretor podem adicionar imóveis
-    if not hasattr(request.user, 'perfil_corretor'):
-        messages.error(request, 'Apenas corretores podem adicionar imóveis!')
-        return redirect('pagina_inicial')
-
     if request.method == "POST":
-        v_titulo = request.POST.get('titulo')
-        v_descricao = request.POST.get('descricao')
-        v_tipo = request.POST.get('tipo_Imovel')
-        v_ano = request.POST.get('ano_construcao')
-        v_preco = request.POST.get('preco')
-        v_logradouro = request.POST.get('logradouro')
-        v_numero = request.POST.get('numero')
-        v_bairro = request.POST.get('bairro')
-        v_cidade = request.POST.get('cidade')
+        form = ImovelForm(request.POST, request.FILES)
+        if form.is_valid():
+            novo_imovel = form.save(commit=False)
+            novo_imovel.corretor = request.user
+            novo_imovel.save()
 
-        #imagem principal
-        v_imagem = request.FILES.get('imagem_principal')
+            #Captura a lista de imagens adicionais
+            imagens_adicionais = request.FILES.getlist('imagens_adicionais')
+            for foto in imagens_adicionais:
+                ImagemImovel.objects.create(imovel=novo_imovel, imagem=foto)
 
-        novo_imovel = Imovel(
-            titulo=v_titulo,
-            descricao=v_descricao,
-            tipo_Imovel=v_tipo,
-            ano_construcao=v_ano,
-            preco=v_preco,
-            logradouro=v_logradouro,
-            numero=v_numero,
-            bairro=v_bairro,
-            cidade=v_cidade,
-            imagem_principal=v_imagem,
-            corretor=request.user
-        )
-        novo_imovel.save()
+            messages.success(request, 'Imóvel cadastrado com sucesso!')
+            return redirect('pagina_inicial')
+    else:
+        form = ImovelForm()
 
-        #Captura a lista de imagens adicionais
-        imagens_adicionais = request.FILES.getlist('imagens_adicionais')
-        for foto in imagens_adicionais:
-            ImagemImovel.objects.create(
-                imovel=novo_imovel,
-                imagem=foto
-            )
-        messages.success(request, 'Imóvel cadastrado com sucesso!')
-        return redirect('pagina_inicial')
+    return render(request, 'adicionar_imovel.html', {'form': form})
 
-    return render(request, 'adicionar_imovel.html')
 
-@login_required
+@corretor_required
 def editar_imovel(request, id):
     imovel_existente = get_object_or_404(Imovel, id=id)
 
-    if imovel_existente.corretor != request.user:
-        messages.error(request, 'Você não tem permissão para realizar essa ação! \nApenas o corretor responsável pode editar esse imóvel!')
-        return redirect('pagina_inicial')
-
     if request.method == "POST":
-        imovel_existente.titulo = request.POST.get('titulo')
-        imovel_existente.descricao = request.POST.get('descricao')
-        imovel_existente.tipo_Imovel = request.POST.get('tipo_Imovel')
-        imovel_existente.ano_construcao = request.POST.get('ano_construcao')
-        imovel_existente.preco = request.POST.get('preco')
-        imovel_existente.logradouro = request.POST.get('logradouro')
-        imovel_existente.numero = request.POST.get('numero')
-        imovel_existente.bairro = request.POST.get('bairro')
-        imovel_existente.cidade = request.POST.get('cidade')
+        form = ImovelForm(request.POST, request.FILES, instance=imovel_existente)
 
-        # Atualizando a imagem de capa (se enviada)
-        if request.FILES.get('imagem_principal'):
-            imovel_existente.imagem_principal = request.FILES.get('imagem_principal')
+        if form.is_valid():
+            form.save()
 
-        imovel_existente.save()
-
-        #Excluir fotos selecionadas
-        fotos_para_excluir = request.POST.getlist('excluir_fotos')
-        if fotos_para_excluir:
+            #Excluir fotos selecionadas
             # Filtra e deleta do banco de dados todas as fotos cujos IDs estão na lista
-            imovel_existente.imagens.filter(id__in=fotos_para_excluir).delete()
+            fotos_para_excluir = request.POST.getlist('excluir_fotos')
+            if fotos_para_excluir:
+                  imovel_existente.imagens.filter(id__in=fotos_para_excluir).delete()
 
-        #Adição de novas fotos no carrossel
-        # Captura os múltiplos arquivos enviados pelo input name="imagens_adicionais"
-        novas_imagens = request.FILES.getlist('imagens_adicionais')
-        for foto in novas_imagens:
-            # Cria um registro no modelo secundário vinculando a foto a este imóvel
-            ImagemImovel.objects.create(imovel=imovel_existente, imagem=foto)
+            #Adição de novas fotos no carrossel
+            novas_imagens = request.FILES.getlist('imagens_adicionais')
+            for foto in novas_imagens:
+                ImagemImovel.objects.create(imovel=imovel_existente, imagem=foto)
 
-        messages.success(request, 'As alterações do imóvel foram salvas com sucesso!')
-        return redirect('pagina_inicial')
+            messages.success(request, 'As alterações do imóvel foram salvas com sucesso!')
+            return redirect('pagina_inicial')
+
+    #Quando o usuário entra na tela (Metodo GET)
+    else:
+          form = ImovelForm(instance=imovel_existente)
 
     fotos_atuais = imovel_existente.imagens.all()
 
-    # Criando o dicionário de contexto
     dados_para_tela = {
+        'form': form,
         'imovel': imovel_existente,
         'fotos': fotos_atuais
     }
 
-    # Passando o dicionário para a função render
     return render(request, 'editar_imovel.html', dados_para_tela)
 
 
-@login_required
+@corretor_required
 @require_POST
 def excluir_imovel(request, id):
     imovel_para_deletar = get_object_or_404(Imovel, id=id)
-
-    if imovel_para_deletar.corretor != request.user:
-        messages.error(request, 'Você não tem permissão para realizar essa operação!\nApenas o corretor responsável pode excluir esse imóvel!')
-        return redirect('pagina_inicial')
-
-
     imovel_para_deletar.delete()
     messages.success(request, 'Imóvel excluído com suceso!')
     return redirect('pagina_inicial')
@@ -142,6 +110,7 @@ def detalhes_imovel(request, id):
     }
 
     return render(request, 'detalhes_imovel.html', dados_para_a_tela)
+
 
 @login_required
 def detalhes_perfil(request):
@@ -166,33 +135,39 @@ def detalhes_perfil(request):
     return render(request, 'detalhes_perfil.html', dados_para_tela)
 
 
-@login_required     #Só quem tá logado pode acessar essa função
+@login_required
 def editar_perfil(request):
     usuario = request.user
-    perfil = None
     tipo_perfil = None
+    perfil_form = None
 
     if hasattr(usuario, 'perfil_cliente'):
-        perfil = usuario.perfil_cliente
         tipo_perfil = 'cliente'
+        perfil_form = ClienteForm(request.POST or None, instance=usuario.perfil_cliente)
+
     elif hasattr(usuario, 'perfil_corretor'):
-        perfil = usuario.perfil_corretor
         tipo_perfil = 'corretor'
+        perfil_form = CorretorForm(request.POST or None, instance=usuario.perfil_corretor)
+
+    else:
+        tipo_perfil = 'admin'
+
+    user_form = EditarUsuarioForm(request.POST or None, instance=usuario)
 
     if request.method == "POST":
-        usuario.username = request.POST.get('username')
-        usuario.email = request.POST.get('email')
-        usuario.save()
+        if user_form.is_valid() and (perfil_form is None or perfil_form.is_valid()):
+            user_form.save()
+            if perfil_form:
+                perfil_form.save()
 
-        if perfil:
-            perfil.telefone = request.POST.get('telefone')
-            perfil.save()
-        return redirect('pagina_inicial')
+            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+            return redirect('pagina_inicial')
 
     dados_para_a_tela = {
-        'usuario': usuario,
-        'perfil': perfil,
-        'tipo_perfil': tipo_perfil
+        'form': user_form,
+        'perfil_form': perfil_form,
+        'tipo_perfil': tipo_perfil,
+        'usuario': usuario
     }
     return render(request, 'editar_perfil.html', dados_para_a_tela)
 
@@ -200,42 +175,34 @@ def editar_perfil(request):
 #Lógica do cadastro
 def cadastrar_usuario(request):
     if request.method == "POST":
-        # Capturando os dados que vieram do formulário limpo do HTML
-        usuario_input = request.POST.get('username')
-        email_input = request.POST.get('email')
-        telefone_usuario = request.POST.get('telefone')
-        tipo_usuario = request.POST.get('tipo_usuario', 'cliente')
-        senha_input = request.POST.get('password')
-        confirmacao_senha = request.POST.get('password_confirm')
 
-        # Validação simples: verifica se as senhas são iguais
-        if senha_input != confirmacao_senha:
-            messages.error(request, 'A senha e a confirmação devem ser iguais!')
-            return render(request, 'cadastro.html')
+        form = CadastroUsuarioForm(request.POST)
+        tipo_perfil = request.POST.get('tipo_perfil', 'cliente')
+        if form.is_valid():
+            dados = form.cleaned_data
 
-        # Validação simples: verifica se o usuário já existe
-        if User.objects.filter(username=usuario_input).exists():
-            messages.error(request, 'Este nome de usuário já está em uso.')
-            return render(request, 'cadastro.html')
+            usuario = User.objects.create_user(
+                username=dados['username'],
+                first_name=dados['first_name'],
+                email=dados['email'],
+                password=dados['password'],
+            )
 
-        # 1. Cria o Usuário padrão do Django criptografando a senha de forma segura
-        usuario = User.objects.create_user(username=usuario_input, email=email_input, password=senha_input)
+            if tipo_perfil == 'corretor':
+                Corretor.objects.create(usuario=usuario, telefone=dados['telefone'])
+                messages.success(request, 'Cadastro de Corretor Realizado com Sucesso!')
+            else:
+                Cliente.objects.create(usuario=usuario, telefone=dados['telefone'])
+                messages.success(request, 'Cadastro de Cliente Realizado com Sucesso!')
 
-        # 2. Vincula ao Perfil correspondente (Corretor ou Cliente)
-        if tipo_usuario == 'corretor':
-            Corretor.objects.create(usuario=usuario, telefone=telefone_usuario)
-            # PARA TESTAR SE TÁ CADASTRANDO CERTO
-            messages.success(request, 'Cadastro de Corretor Realizado com Sucesso!')
+            login(request, usuario)
+            return redirect('pagina_inicial')
         else:
-            Cliente.objects.create(usuario=usuario, telefone=telefone_usuario)
-            messages.success(request, 'Cadastro de Cliente Realizado com Sucesso!')
+            messages.error(request, 'Por favor, corrija os erros no formulário abaixo!')
+    else:
+        form = CadastroUsuarioForm()
 
-        # 3. Loga o usuário automaticamente e redireciona
-        login(request, usuario)
-        messages.success(request, 'Cadastro Realizado com Sucesso!')
-        return redirect('pagina_inicial')
-
-    return render(request, 'cadastro.html')
+    return render(request, 'cadastro.html', {'form': form})
 
 
 #lógica do login

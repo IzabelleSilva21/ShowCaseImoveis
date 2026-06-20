@@ -1,9 +1,9 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block titulo %} Cadastrar Usuário | ShowCase Imóveis {% endblock %}
 
-{%block content%}
+{% block content %}
 
 <div class="row justify-content-center mt-5">
     <div class="col-md-5">
@@ -15,42 +15,78 @@
                 <form method="POST">
                     {% csrf_token %}
 
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger p-2 small">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
                     <div class="mb-3">
-                        <label for="usuario" class="form-label"> Usuário </label>
-                        <input type="text" name="username" class="form-control" id="usuario"
-                               placeholder="Digite seu usuário" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> Nome Completo </span>
+                            {{ form.first_name }}
+                        </label>
+                        {% if form.first_name.errors %}
+                            <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label for="email" class="form-label"> E-mail </label>
-                        <input type="email" name="email" class="form-control" id="email"
-                        placeholder="exemplo@gmail.com" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> Usuário </span>
+                            {{ form.username }}
+                        </label>
+                        {% if form.username.errors %}
+                            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label for="telefone" class="form-label"> Telefone </label>
-                        <input type="text" name="telefone" class="form-control" id="telefone"
-                               placeholder="(DD) 99999-9999" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> E-mail </span>
+                            {{ form.email }}
+                        </label>
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label for="tipo_usuario" class="form-label"> Tipo de Usuário </label>
-                        <select name="tipo_usuario" id="tipo_usuario" class="form-select" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> Telefone </span>
+                            {{ form.telefone }}
+                        </label>
+                        {% if form.telefone.errors %}
+                            <div class="text-danger small mt-1">{{ form.telefone.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo_perfil" class="form-label"> Tipo de Usuário </label>
+                        <select name="tipo_perfil" id="tipo_perfil" class="form-select" required>
                             <option value="cliente" selected> Cliente </option>
                             <option value="corretor"> Corretor </option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label for="senha" class="form-label"> Senha </label>
-                        <input type="password" name="password" class="form-control" id="senha"
-                               placeholder="Cadastre uma senha" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> Senha </span>
+                            {{ form.password }}
+                        </label>
+                        {% if form.password.errors %}
+                            <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="mb-3">
-                        <label for="confirmar_senha" class="form-label"> Confirmar Senha </label>
-                        <input type="password" name="password_confirm" class="form-control" id="confirmar_senha"
-                               placeholder="Confirme sua senha" required>
+                        <label class="form-label d-block">
+                            <span class="d-block mb-1"> Confirmar Senha </span>
+                            {{ form.password_confirm }}
+                        </label>
+                        {% if form.password_confirm.errors %}
+                            <div class="text-danger small mt-1">{{ form.password_confirm.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="d-grid gap-2 mt-4">

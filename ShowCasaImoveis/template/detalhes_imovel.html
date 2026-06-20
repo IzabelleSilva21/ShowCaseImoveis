@@ -81,6 +81,16 @@
                 <h5 class="fw-bold mb-2">Descrição:</h5>
                 <p class="text-secondary flex-grow-1">{{ imovel.descricao }}</p>
 
+                {% if user != imovel.corretor %}
+                <div class="p-2 rounded bg-light border-start border-primary border-3 mb-3">
+                    <small class="text-muted d-block">Corretor responsável:</small>
+                    <span class="fw-bold text-dark">
+                        <i class="bi bi-person-badge me-1 text-primary"></i>
+                        {{ imovel.corretor.first_name|default:imovel.corretor.username }}
+                    </span>
+                </div>
+                {% endif %}
+
                 <hr>
 
                 <div class="mt-auto">

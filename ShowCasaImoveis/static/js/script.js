@@ -1,6 +1,6 @@
 // console.log("O arquivo mascaras.js foi carregado com sucesso!");
 document.addEventListener("DOMContentLoaded", function () {
-    const inputTelefone = document.getElementById("telefone");
+    const inputTelefone = document.getElementById("id_telefone") || document.getElementById("telefone");
 
     if (inputTelefone) {
         inputTelefone.addEventListener("input", function (e) {
